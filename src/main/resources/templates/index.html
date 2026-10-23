@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>TODO List Thymeleaf</title>
+</head>
+<body>
+<h1>TODO List Thymeleaf</h1>
+
+<div th:if="${idError}" th:text="${idError}" style="color: red;"></div>
+
+<form method="post" action="/">
+    <input type="hidden" name="action" value="create">
+
+    <label>Enter text:</label>
+    <input type="text" name="text">
+    <button type="submit">Create</button>
+
+    <div th:if="${createError}" th:text="${createError}" style="color: red;"></div>
+</form>
+
+<ul>
+    <li th:each="item : ${todoItems}">
+        <form method="post" action="/">
+            <input type="hidden" name="id" th:value="${item.id}">
+
+            <input type="text" name="text" th:value="${item.text}">
+            <button type="submit" name="action" value="save">Save</button>
+            <button type="submit" name="action" value="delete">Delete</button>
+
+            <div th:if="${saveError != null and saveErrorId != null and saveErrorId == item.id}"
+                 th:text="${saveError}"
+                 style="color: red;"></div>
+        </form>
+    </li>
+</ul>
+</body>
+</html>
