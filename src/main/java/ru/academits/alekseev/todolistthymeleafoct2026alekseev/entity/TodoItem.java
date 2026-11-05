@@ -13,5 +13,4 @@ public class TodoItem {
         this.id = id;
         this.text = text;
     }
-
 }

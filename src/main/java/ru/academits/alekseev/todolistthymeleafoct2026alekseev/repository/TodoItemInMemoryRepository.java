@@ -15,7 +15,9 @@ public class TodoItemInMemoryRepository implements TodoItemRepository {
     @Override
     public List<TodoItem> getAll() {
         synchronized (todoItems) {
-            return todoItems;
+            return todoItems.stream()
+                    .map(item -> new TodoItem(item.getId(), item.getText()))
+                    .toList();
         }
     }
 

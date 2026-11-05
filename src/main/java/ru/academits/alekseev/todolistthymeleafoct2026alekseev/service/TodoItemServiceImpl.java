@@ -23,7 +23,7 @@ public class TodoItemServiceImpl implements TodoItemService {
     @Override
     public void create(TodoItem todoItem) {
         if (todoItem == null) {
-            throw new IllegalArgumentException("TodoItem must not be null");
+            throw new NullPointerException("TodoItem must not be null");
         }
 
         String newText = todoItem.getText().trim();
@@ -39,7 +39,7 @@ public class TodoItemServiceImpl implements TodoItemService {
     @Override
     public void update(TodoItem todoItem) {
         if (todoItem == null) {
-            throw new IllegalArgumentException("TodoItem must not be null");
+            throw new NullPointerException("TodoItem must not be null");
         }
 
         String newText = todoItem.getText().trim();
