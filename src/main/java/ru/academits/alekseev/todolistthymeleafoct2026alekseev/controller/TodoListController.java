@@ -29,38 +29,49 @@ public class TodoListController {
                             @RequestParam(required = false) String text,
                             @RequestParam(required = false) Integer id,
                             RedirectAttributes redirectAttributes) {
-        switch (action) {
-            case "create" -> {
-                if (text == null || text.isEmpty()) {
-                    redirectAttributes.addFlashAttribute("createError", "Text must not be empty");
-                    break;
+        try {
+            switch (action) {
+                case "create" -> {
+                    if (text == null || text.isEmpty()) {
+                        redirectAttributes.addFlashAttribute("createError", "Text must not be empty");
+                        break;
+                    }
+
+                    todoItemService.create(new TodoItem(0, text));
                 }
 
-                todoItemService.create(new TodoItem(0, text));
-            }
+                case "save" -> {
+                    if (text == null || text.isEmpty()) {
+                        redirectAttributes.addFlashAttribute("saveError", "Text must not be empty");
+                        redirectAttributes.addFlashAttribute("saveErrorId", id);
+                        break;
+                    }
 
-            case "save" -> {
-                if (text == null || text.isEmpty()) {
-                    redirectAttributes.addFlashAttribute("saveError", "Text must not be empty");
+                    if (id == null) {
+                        redirectAttributes.addFlashAttribute("idError", "Id must not be null");
+                        break;
+                    }
+
+                    todoItemService.update(new TodoItem(id, text));
+                }
+
+                case "delete" -> {
+                    if (id == null) {
+                        redirectAttributes.addFlashAttribute("idError", "Id must not be null");
+                        break;
+                    }
+
+                    todoItemService.delete(id);
+                }
+            }
+        } catch (IllegalArgumentException | NullPointerException e) {
+            switch (action) {
+                case "create" -> redirectAttributes.addFlashAttribute("createError", e.getMessage());
+
+                case "save" -> {
+                    redirectAttributes.addFlashAttribute("saveError", e.getMessage());
                     redirectAttributes.addFlashAttribute("saveErrorId", id);
-                    break;
                 }
-
-                if (id == null) {
-                    redirectAttributes.addFlashAttribute("idError", "Id must not be null");
-                    break;
-                }
-
-                todoItemService.update(new TodoItem(id, text));
-            }
-
-            case "delete" -> {
-                if (id == null) {
-                    redirectAttributes.addFlashAttribute("idError", "Id must not be null");
-                    break;
-                }
-
-                todoItemService.delete(id);
             }
         }
 
